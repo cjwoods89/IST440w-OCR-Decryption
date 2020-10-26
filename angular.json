@@ -138,6 +138,7 @@
   },
   "defaultProject": "mdb-angular-boilerplate",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
+    "defaultCollection": "@ngrx/schematics",
+    "analytics": false
   }
 }
