@@ -51,12 +51,4 @@ export class LoginComponent implements OnInit {
     this.store.dispatch(new actions.SocialLogin({ authProvider }));
   }
 
-  onFacebookLogin(authProvider: string) {
-    this.store.dispatch(new actions.SocialLogin({ authProvider }));
-  }
-
-  onTwitterLogin(authProvider: string) {
-    this.store.dispatch(new actions.SocialLogin({ authProvider }));
-  }
-
 }

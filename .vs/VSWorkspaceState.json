@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\environments"
+    "\\.github\\workflows",
+    "\\src"
   ],
-  "SelectedNode": "\\src\\environments\\environment.prod.ts",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
