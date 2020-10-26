@@ -33,13 +33,6 @@ export class AuthService {
       provider = new firebase.auth.GoogleAuthProvider();
     }
 
-    if (authProvider === 'facebook') {
-      provider = new firebase.auth.FacebookAuthProvider();
-    }
-
-    if (authProvider === 'twitter') {
-      provider = new firebase.auth.TwitterAuthProvider();
-    }
     return from(this.afAuth.auth.signInWithPopup(provider));
   }
 
