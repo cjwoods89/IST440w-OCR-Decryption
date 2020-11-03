@@ -17,7 +17,6 @@ export class ProjectModalComponent implements OnInit {
     imgString: string = 'https://via.placeholder.com/250';
     imgSrc: string = this.imgString;
     selectedImage: any = null;
-    imageUrl: string;
 
     heading: string;
 
@@ -47,12 +46,11 @@ export class ProjectModalComponent implements OnInit {
             this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
                 finalize(() => {
                     fileRef.getDownloadURL().subscribe((url) => {
-                        console.log(url);
-                        this.imageUrl = url;
+                        this.project.photoUrl = url;
+                        this.projectData.next(this.project);
                     })
                 })
             ).subscribe();
-            /*this.projectData.next(this.project);*/
             /*Call OCR method*/
             this.modalRef.hide();
         } else {
