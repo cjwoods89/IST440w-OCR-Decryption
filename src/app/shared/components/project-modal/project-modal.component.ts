@@ -6,6 +6,8 @@ import { NgForm } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
+import * as vision from '@google-cloud/vision';
+import { start } from 'repl';
 
 @Component({
     selector: 'app-project-modal',
@@ -48,6 +50,7 @@ export class ProjectModalComponent implements OnInit {
                     fileRef.getDownloadURL().subscribe((url) => {
                         this.project.photoUrl = url;
                         this.projectData.next(this.project);
+                        this.startOCR(url);
                     })
                 })
             ).subscribe();
@@ -60,6 +63,16 @@ export class ProjectModalComponent implements OnInit {
     }
 
     /*OCR Mechanism*/
+
+    async startOCR(uploadedUrl: string) {
+        const client = new vision.ImageAnnotatorClient();
+
+        const [result] = await client.documentTextDetection(
+            uploadedUrl
+        );
+        const fullTextAnnotation = result.fullTextAnnotation;
+        console.log(fullTextAnnotation?.text);
+    }
 
     showPreview(event: any) {
         if (event.target.files && event.target.files[0]) {
