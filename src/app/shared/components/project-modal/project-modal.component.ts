@@ -6,7 +6,6 @@ import { NgForm } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
-import * as vision from '@google-cloud/vision';
 import { start } from 'repl';
 
 @Component({
@@ -50,7 +49,7 @@ export class ProjectModalComponent implements OnInit {
                     fileRef.getDownloadURL().subscribe((url) => {
                         this.project.photoUrl = url;
                         this.projectData.next(this.project);
-                        this.startOCR(url);
+                        // this.ocrFunc(url);
                     })
                 })
             ).subscribe();
@@ -63,15 +62,17 @@ export class ProjectModalComponent implements OnInit {
     }
 
     /*OCR Mechanism*/
+    async ocrFunc(fileLink: string) {
+        const vision = require('@google-cloud/vision');
 
-    async startOCR(uploadedUrl: string) {
+        // Creates a client
         const client = new vision.ImageAnnotatorClient();
 
-        const [result] = await client.documentTextDetection(
-            uploadedUrl
-        );
-        const fullTextAnnotation = result.fullTextAnnotation;
-        console.log(fullTextAnnotation?.text);
+        // Performs text detection on the gcs file
+        const [result] = await client.textDetection(`${fileLink}`);
+        const detections = result.textAnnotations;
+        console.log('Text:');
+        detections.forEach((text: any) => console.log(text));
     }
 
     showPreview(event: any) {
