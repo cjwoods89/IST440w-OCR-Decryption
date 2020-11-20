@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MDBModalRef } from 'angular-bootstrap-md';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Project } from '../../../projects/models/project.model';
 import { NgForm } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
-import { start } from 'repl';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-project-modal',
@@ -18,7 +18,10 @@ export class ProjectModalComponent implements OnInit {
     imgString: string = 'https://via.placeholder.com/250';
     imgSrc: string = this.imgString;
     selectedImage: any = null;
+    baseURL: string = "https://vision.googleapis.com/v1/images:annotate?key=";
+    key: string = "AIzaSyAc48fqfzeIEHIhlBUmPlmWdpJoAL3TmMg";
 
+    loading : boolean = false;
     heading: string;
 
     title: string;
@@ -28,7 +31,7 @@ export class ProjectModalComponent implements OnInit {
     projectData: Subject<Project> = new Subject();
     project: Project = {};
 
-    constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage) { }
+    constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private http: HttpClient) { }
 
     ngOnInit() {
     }
@@ -40,39 +43,37 @@ export class ProjectModalComponent implements OnInit {
     }
 
     onSave() {
+        this.loading = true;
         const userId = this.userId;
         if (this.projectForm.valid) {
             var filePath = `OCR_Images/${userId}/${this.selectedImage.name.split('.').slice(0,-1).join('.')}_${new Date().getTime()}`;
             const fileRef = this.storage.ref(filePath);
+            var ocrResult = "";
             this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
                 finalize(() => {
                     fileRef.getDownloadURL().subscribe((url) => {
                         this.project.photoUrl = url;
-                        this.projectData.next(this.project);
-                        // this.ocrFunc(url);
+                        this.ocrFunc(url).subscribe({
+                            next: data => {
+                                console.log(data.body.responses[0].fullTextAnnotation.text);
+                                ocrResult = data.body.responses[0].fullTextAnnotation.text
+                                this.project.ocrText = ocrResult;
+                                console.log("Set text");
+                                this.projectData.next(this.project);
+                                this.modalRef.hide();
+                            },
+                            error: error => {
+                                console.log(error);
+                                this.modalRef.hide();
+                            }
+                        })
                     })
                 })
-            ).subscribe();
-            /*Call OCR method*/
-            this.modalRef.hide();
+            )
         } else {
             const controls = this.projectForm.controls;
             Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
         }
-    }
-
-    /*OCR Mechanism*/
-    async ocrFunc(fileLink: string) {
-        const vision = require('@google-cloud/vision');
-
-        // Creates a client
-        const client = new vision.ImageAnnotatorClient();
-
-        // Performs text detection on the gcs file
-        const [result] = await client.textDetection(`${fileLink}`);
-        const detections = result.textAnnotations;
-        console.log('Text:');
-        detections.forEach((text: any) => console.log(text));
     }
 
     showPreview(event: any) {
@@ -85,6 +86,33 @@ export class ProjectModalComponent implements OnInit {
             this.imgSrc = this.imgString;
             this.selectedImage = null;
         }
+    }
+
+    /*OCR Mechanism*/
+    ocrFunc(fileLink: string): Observable<any> {
+        var request = {
+            "requests": [
+                {
+                    "image": {
+                        "source": {
+                            "imageUri": fileLink
+                        }
+                    },
+                    "features": [
+                        {
+                            "type": "TEXT_DETECTION",
+                            "maxResults": 10
+                        }
+                    ]
+                }
+            ]
+        }
+
+        console.log(fileLink);
+        const headers = { 'content-type': 'application/json'}  
+        const body=JSON.stringify(request);
+        console.log(body)
+        return this.http.post(this.baseURL + this.key, body,{'headers':headers, observe: 'response'});
     }
 
 }
