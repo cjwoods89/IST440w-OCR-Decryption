@@ -3,4 +3,6 @@ export interface Project {
     title?: string;
     description?: string;
     photoUrl?: string;
+    ocrText?: string;
+    textLocale?: string;
 }
