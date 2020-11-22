@@ -33,6 +33,6 @@
                 mdbWavesEffect>
             Close
         </button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" mdbWavesEffect (click)="onSave()">Save!</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" mdbWavesEffect (click)="onSave()" [class.spinner]="loading" [disabled]="loading">Save!</button>
     </div>
 </div>
