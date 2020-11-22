@@ -58,6 +58,7 @@ export class ProjectModalComponent implements OnInit {
                         this.project.photoUrl = url;
                         this.ocrFunc(url).subscribe({
                             next: data => {
+                                console.log(data.body.responses[0]);
                                 console.log(this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description));
                                 ocrResult = this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description);
                                 this.project.ocrText = ocrResult;
@@ -91,7 +92,6 @@ export class ProjectModalComponent implements OnInit {
         }
     }
 
-    /*OCR Mechanism*/
     ocrFunc(fileLink: string): Observable<any> {
         var request = {
             "requests": [
