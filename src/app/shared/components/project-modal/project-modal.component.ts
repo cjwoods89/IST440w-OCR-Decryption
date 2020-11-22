@@ -23,7 +23,7 @@ export class ProjectModalComponent implements OnInit {
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
 
-    loading : boolean = false;
+    loading: boolean = false;
 
     heading: string;
 
@@ -102,24 +102,24 @@ export class ProjectModalComponent implements OnInit {
                         }
                     },
                     "features": [
-                        { 
-                            "type": "TEXT_DETECTION",
+                        {
+                            "type": "DOCUMENT_TEXT_DETECTION",
                             "maxResults": 10
                         }
                     ]
                 }
             ]
         }
-    
+
         console.log(fileLink);
-        const headers = { 'content-type': 'application/json'}  
-        const body=JSON.stringify(request);
+        const headers = { 'content-type': 'application/json' }
+        const body = JSON.stringify(request);
         console.log(body)
-        return this.http.post(this.baseURL + this.apiKey, body,{'headers':headers, observe: 'response'});
+        return this.http.post(this.baseURL + this.apiKey, body, { 'headers': headers, observe: 'response' });
     }
 
-    removeLinebreaks(dirtyString: string ) {
-        return dirtyString.replace(/[\r\n]+/gm, " "); 
-    } 
+    removeLinebreaks(dirtyString: string) {
+        return dirtyString.replace(/[\r\n]+/gm, " ");
+    }
 
 }
