@@ -58,8 +58,8 @@ export class ProjectModalComponent implements OnInit {
                         this.project.photoUrl = url;
                         this.ocrFunc(url).subscribe({
                             next: data => {
-                                console.log(data.body.responses[0].fullTextAnnotation.text);
-                                ocrResult = data.body.responses[0].fullTextAnnotation.text
+                                console.log(this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description));
+                                ocrResult = this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description);
                                 this.project.ocrText = ocrResult;
                                 console.log("Set text");
                                 this.projectData.next(this.project);
@@ -79,8 +79,6 @@ export class ProjectModalComponent implements OnInit {
         }
     }
 
-    /*OCR Mechanism*/
-
     showPreview(event: any) {
         if (event.target.files && event.target.files[0]) {
             const reader = new FileReader();
@@ -93,31 +91,35 @@ export class ProjectModalComponent implements OnInit {
         }
     }
 
-        /*OCR Mechanism*/
-        ocrFunc(fileLink: string): Observable<any> {
-            var request = {
-                "requests": [
-                    {
-                        "image": {
-                            "source": {
-                                "imageUri": fileLink
-                            }
-                        },
-                        "features": [
-                            {
-                                "type": "TEXT_DETECTION",
-                                "maxResults": 10
-                            }
-                        ]
-                    }
-                ]
-            }
-    
-            console.log(fileLink);
-            const headers = { 'content-type': 'application/json'}  
-            const body=JSON.stringify(request);
-            console.log(body)
-            return this.http.post(this.baseURL + this.apiKey, body,{'headers':headers, observe: 'response'});
+    /*OCR Mechanism*/
+    ocrFunc(fileLink: string): Observable<any> {
+        var request = {
+            "requests": [
+                {
+                    "image": {
+                        "source": {
+                            "imageUri": fileLink
+                        }
+                    },
+                    "features": [
+                        { 
+                            "type": "TEXT_DETECTION",
+                            "maxResults": 10
+                        }
+                    ]
+                }
+            ]
         }
+    
+        console.log(fileLink);
+        const headers = { 'content-type': 'application/json'}  
+        const body=JSON.stringify(request);
+        console.log(body)
+        return this.http.post(this.baseURL + this.apiKey, body,{'headers':headers, observe: 'response'});
+    }
+
+    removeLinebreaks(dirtyString: string ) {
+        return dirtyString.replace(/[\r\n]+/gm, " "); 
+    } 
 
 }
