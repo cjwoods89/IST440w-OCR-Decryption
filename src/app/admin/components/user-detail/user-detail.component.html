@@ -46,20 +46,5 @@
     </div>
 
     <app-projects-list *ngIf="!userProjectsLoading && projects" [editable]="false" [projects]="projects" (projectDeleted)="onProjectDelete($event)"></app-projects-list>
-
-    <hr class="my-5">
-
-    <div class="d-flex flex-row align-items-center mb-4">
-      <h4 class="mr-3">Customers</h4>
-      <button mdbBtn color="primary" size="sm" (click)="loadCustomers()">Load user customers</button>
-    </div>
-
-    <div *ngIf="userCustomersLoading" class="d-flex justify-content-center align-items-center" style="margin-top: 50px">
-      <div class="spinner-grow text-primary" role="status" style="width: 4rem; height: 4rem;">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-
-    <app-customers-list *ngIf="!userCustomersLoading && customers" [customers]="customers" (customerDeleted)="onCustomerDelete($event)"></app-customers-list>
   </mdb-card-body>
 </mdb-card>

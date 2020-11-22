@@ -16,14 +16,10 @@
     *ngIf="selectedUser"
     [user]="selectedUser$ | async"
     [projects]="userProjects$ | async"
-    [customers]="userCustomers$ | async"
     [userProjectsLoading]="userProjectsLoading$ | async"
-    [userCustomersLoading]="userCustomersLoading$ | async"
     (detailsClosed)="onDetailsClose()"
     (projectsLoad)="onProjectsLoad()"
-    (customersLoad)="onCustomersLoad()"
     (projectDeleted)="onProjectDelete($event)"
-    (customerDeleted)="onCustomerDelete($event)"
     (addAdmin)="addAdminPrivileges($event)"
     (removeAdmin)="removeAdminPrivileges($event)"></app-user-detail>
 </div>

@@ -10,15 +10,12 @@ import {
   getSelectedUser,
   getUsersListLoading,
   getUserProjectsLoading,
-  getUserCustomers,
-  getUserCustomersLoading
 } from '../../store/admin.selectors';
 import { Project } from '../../../projects/models/project.model';
 import { User } from '../../../auth/models/user.model';
 import { map, delay, take } from 'rxjs/operators';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
-import { Customer } from '../../../customers/models/customer.model';
 
 @Component({
   selector: 'app-admin',
@@ -33,10 +30,8 @@ export class AdminComponent implements OnInit {
 
   users$: Observable<any>;
   userProjects$: Observable<Project[]>;
-  userCustomers$: Observable<Customer[]>;
   usersListLoading$: Observable<boolean>;
   userProjectsLoading$: Observable<boolean>;
-  userCustomersLoading$: Observable<boolean>;
   selectedUser$: Observable<any>;
   selectedUser: any;
   uid: any;
@@ -59,8 +54,7 @@ export class AdminComponent implements OnInit {
       })
     );
     this.usersListLoading$ = this.store.select(getUsersListLoading);
-    this.userProjectsLoading$ = this.store.select(getUserProjectsLoading);
-    this.userCustomersLoading$ = this.store.select(getUserCustomersLoading);
+      this.userProjectsLoading$ = this.store.select(getUserProjectsLoading);
   }
 
   onUserSelect(user: any) {
@@ -77,23 +71,10 @@ export class AdminComponent implements OnInit {
       })
     );
 
-    this.userCustomers$ = this.store.select(getUserCustomers, user.uid).pipe(
-      map(customers => {
-        if (customers && customers.length !== 0) {
-          return customers;
-        } else {
-          return null;
-        }
-      })
-    );
   }
 
   onProjectsLoad() {
     this.store.dispatch(new fromAdmin.GetUserProjects({ uid: this.uid }));
-  }
-
-  onCustomersLoad() {
-    this.store.dispatch(new fromAdmin.GetUserCustomers({ uid: this.uid }));
   }
 
   onDetailsClose() {
@@ -118,30 +99,6 @@ export class AdminComponent implements OnInit {
           );
         }
       });
-  }
-
-  openCustomerConfirmModal(customer: Customer) {
-    this.modalRef = this.modalService.show(
-      ConfirmModalComponent,
-      this.modalConfig
-    );
-
-    this.modalRef.content.confirmation
-      .pipe(take(1))
-      .subscribe((confirmation: boolean) => {
-        if (confirmation) {
-          this.store.dispatch(
-            new fromAdmin.DeleteUserCustomer({
-              userId: this.selectedUser.key,
-              customerId: customer.key
-            })
-          );
-        }
-      });
-  }
-
-  onCustomerDelete(customer: Customer) {
-    this.openCustomerConfirmModal(customer);
   }
 
   onProjectDelete(project: Project) {

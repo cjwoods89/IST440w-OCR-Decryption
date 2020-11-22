@@ -6,7 +6,6 @@ import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { AdminService } from '../services/admin.service';
 import { Project } from '../../projects/models/project.model';
 import { of } from 'rxjs';
-import { Customer } from '../../customers/models/customer.model';
 
 
 @Injectable()
@@ -71,41 +70,6 @@ export class AdminEffects {
     ofType(fromAdmin.AdminActionTypes.DELETE_USER_PROJECT),
     map( (action: fromAdmin.DeleteUserProject) => action.payload),
     switchMap( (payload: any) => this.adminService.deleteUserProject(payload.userId, payload.projectId)
-      .pipe(
-        catchError( (error: any) => of(new fromAdmin.AdminError({ error })))
-      )
-    )
-  );
-
-  @Effect()
-  getUserCustomers$ = this.actions$.pipe(
-    ofType(fromAdmin.AdminActionTypes.GET_USER_CUSTOMERS),
-    map((action: fromAdmin.GetUserCustomers) => action.payload),
-    mergeMap( (payload: any) => this.adminService.getUserCustomers(payload.uid)
-      .pipe(
-        map((data: any) => {
-          const customersData: Customer[] = data.map((res: any) => {
-            const key = res.payload.key;
-            const customer: Customer = res.payload.val();
-            return {
-              key: key,
-              id: customer.id,
-              name: customer.name,
-              description: customer.description
-            };
-          });
-          return (new fromAdmin.UserCustomersLoaded({ uid: payload.uid, userCustomers: customersData }));
-        }),
-        catchError(error => of(new fromAdmin.AdminError({ error })))
-      )
-    )
-  );
-
-  @Effect({ dispatch: false })
-  deleteUserCustomer$ = this.actions$.pipe(
-    ofType(fromAdmin.AdminActionTypes.DELETE_USER_CUSTOMER),
-    map( (action: fromAdmin.DeleteUserCustomer) => action.payload),
-    switchMap( (payload: any) => this.adminService.deleteUserCustomer(payload.userId, payload.customerId)
       .pipe(
         catchError( (error: any) => of(new fromAdmin.AdminError({ error })))
       )

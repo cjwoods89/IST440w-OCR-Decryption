@@ -29,23 +29,7 @@ export const getUserProjects = createSelector(
   }
 );
 
-export const getUserCustomers = createSelector(
-  getAdminState,
-  (admin: any, uid: string) => {
-    if (admin.userCustomers.hasOwnProperty(uid)) {
-      return admin.userCustomers[uid];
-    } else {
-      return null;
-    }
-  }
-);
-
 export const getUserProjectsLoading = createSelector(
   getAdminState,
   admin => admin.userProjectsLoading
-);
-
-export const getUserCustomersLoading = createSelector(
-  getAdminState,
-  admin => admin.userCustomersLoading
 );
