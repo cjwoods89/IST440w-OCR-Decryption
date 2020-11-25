@@ -22,21 +22,12 @@ export class AdminService {
     return projectsRef.snapshotChanges();
   }
 
-  getUserCustomers(uid: string) {
-    const customersRef = this.db.list('customers/' + uid);
-    return customersRef.snapshotChanges();
-  }
-
   checkAdminRole(uid: string) {
     return this.db.object('admins/' + uid).valueChanges();
   }
 
   deleteUserProject(uid: string, projectId: string) {
     return from(this.db.object(`projects/${uid}/` + projectId).remove());
-  }
-
-  deleteUserCustomer(uid: string, customerId: string) {
-    return from(this.db.object(`customers/${uid}/` + customerId).remove());
   }
 
   addAdminPrivileges(uid: string) {
