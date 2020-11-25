@@ -20,12 +20,6 @@
         <a (click)="navbar.hide()" class="nav-link waves-light" routerLink="/projects" routerLinkActive="active" mdbWavesEffect>Projects</a>
       </li>
       <li *ngIf="isLoggedIn && !isLoading" class="nav-item">
-        <a (click)="navbar.hide()" class="nav-link waves-light" routerLink="/customers" routerLinkActive="active" mdbWavesEffect>Tables</a>
-      </li>
-      <li *ngIf="isLoggedIn && !isLoading" class="nav-item">
-        <a (click)="navbar.hide()" class="nav-link waves-light" routerLink="/charts" routerLinkActive="active" mdbWavesEffect>Charts</a>
-      </li>
-      <li *ngIf="isLoggedIn && !isLoading" class="nav-item">
         <a (click)="navbar.hide()" class="nav-link waves-light" routerLink="/profile" routerLinkActive="active" mdbWavesEffect>Profile</a>
       </li>
       <li *ngIf="isLoggedIn && !isLoading && isAdmin" class="nav-item">

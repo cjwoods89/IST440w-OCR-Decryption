@@ -8,21 +8,17 @@ import {
   InputUtilitiesModule,
   IconsModule
 } from 'angular-bootstrap-md';
-import { CustomersModalComponent } from './components/customers-modal/customers-modal.component';
 import { ProjectModalComponent } from './components/project-modal/project-modal.component';
 import { FormsModule } from '@angular/forms';
 import { ProjectComponent } from './components/project/project.component';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
-import { CustomersListComponent } from './components/customers-list/customers-list.component';
 
 @NgModule({
   declarations: [
     ConfirmModalComponent,
-    CustomersModalComponent,
     ProjectModalComponent,
     ProjectsListComponent,
     ProjectComponent,
-    CustomersListComponent
   ],
   imports: [
     CommonModule,
@@ -33,11 +29,10 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     ButtonsModule,
     CardsModule
   ],
-  exports: [ProjectsListComponent, ProjectComponent, CustomersListComponent],
+  exports: [ProjectsListComponent, ProjectComponent],
   providers: [],
   entryComponents: [
     ConfirmModalComponent,
-    CustomersModalComponent,
     ProjectModalComponent
   ]
 })

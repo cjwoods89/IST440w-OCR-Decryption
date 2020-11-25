@@ -4,5 +4,4 @@ export interface Project {
     description?: string;
     photoUrl?: string;
     ocrText?: string;
-    textLocale?: string;
 }
