@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Project } from '../models/project.model';
 import { environment } from '../../../environments/environment';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
@@ -33,16 +32,6 @@ export class ProjectsService {
 
   get(userId: string) {
     return this.db.list(`projects/${userId}`).snapshotChanges();
-  }
-
-  update(project: Project, userId: string) {
-    return of(this.db.object(`projects/${userId}/` + project.key)
-      .update({
-        title: project.title,
-        description: project.description,
-        photoUrl: project.photoUrl,
-        ocrText: project.ocrText
-      }));
   }
 
   delete(project: Project, userId: string) {

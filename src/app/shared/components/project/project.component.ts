@@ -9,9 +9,7 @@ import { Project } from '../../../projects/models/project.model';
 })
 export class ProjectComponent implements OnInit {
   @Input() project: Project;
-  @Input() editable = false;
   @Output() deleted = new EventEmitter<Project>();
-  @Output() edited = new EventEmitter<Project>();
 
   constructor() { }
 
@@ -21,9 +19,4 @@ export class ProjectComponent implements OnInit {
   onDelete() {
     this.deleted.emit(this.project);
   }
-
-  onEdit() {
-    this.edited.emit(this.project);
-  }
-
 }
