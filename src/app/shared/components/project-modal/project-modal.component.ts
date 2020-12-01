@@ -18,7 +18,9 @@ export class ProjectModalComponent implements OnInit {
     @ViewChild('projectForm', { static: true }) projectForm: NgForm;
     imgString: string = 'https://via.placeholder.com/250';
     imgSrc: string = this.imgString;
+    base64ImgSrc: string;
     selectedImage: any = null;
+    ocrText: string;
 
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
@@ -56,13 +58,10 @@ export class ProjectModalComponent implements OnInit {
                 finalize(() => {
                     fileRef.getDownloadURL().subscribe((url) => {
                         this.project.photoUrl = url;
-                        this.ocrFunc(url).subscribe({
+                        this.ocrFunc(this.base64ImgSrc).subscribe({
                             next: data => {
-                                console.log(data.body.responses[0]);
-                                console.log(this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description));
                                 ocrResult = this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description);
                                 this.project.ocrText = ocrResult;
-                                console.log("Set text");
                                 this.projectData.next(this.project);
                                 this.modalRef.hide();
                             },
@@ -83,7 +82,10 @@ export class ProjectModalComponent implements OnInit {
     showPreview(event: any) {
         if (event.target.files && event.target.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e: any) => this.imgSrc = e.target.result;
+            reader.onload = (e: any) => {
+                this.imgSrc = e.target.result;
+                this.base64ImgSrc = e.target.result.split(',')[1];
+            }
             reader.readAsDataURL(event.target.files[0]);
             this.selectedImage = event.target.files[0];
         } else {
@@ -97,9 +99,7 @@ export class ProjectModalComponent implements OnInit {
             "requests": [
                 {
                     "image": {
-                        "source": {
-                            "imageUri": fileLink
-                        }
+                        "content": fileLink
                     },
                     "features": [
                         {
@@ -111,10 +111,8 @@ export class ProjectModalComponent implements OnInit {
             ]
         }
 
-        console.log(fileLink);
         const headers = { 'content-type': 'application/json' }
         const body = JSON.stringify(request);
-        console.log(body)
         return this.http.post(this.baseURL + this.apiKey, body, { 'headers': headers, observe: 'response' });
     }
 

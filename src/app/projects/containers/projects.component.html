@@ -6,7 +6,7 @@
 <div class="container-fluid pb-5">
   <div class="py-5">
       <button mdbBtn color="primary" class="ml-3" (click)="openAddProjectModal()">Add new project</button>
-      <app-projects-list [projects]="projects$ | async" (projectDeleted)="onProjectDelete($event)" (projectEdited)="onProjectEdit($event)"></app-projects-list>
+      <app-projects-list [projects]="projects$ | async" (projectDeleted)="onProjectDelete($event)"></app-projects-list>
 
     <div *ngIf="isLoading$ | async" class="d-flex justify-content-center align-items-center" style="margin-top: 200px">
       <div class="spinner-grow text-primary" role="status" style="width: 4rem; height: 4rem;">
