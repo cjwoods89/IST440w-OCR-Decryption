@@ -6,18 +6,23 @@
   <!--Card content-->
   <mdb-card-body>
 
-    <!--Title-->
-    <mdb-card-title>
-      <h4>{{ project.title }}</h4>
-    </mdb-card-title>
+      <!--Title-->
+      <mdb-card-title>
+          <h4>{{ project.title }}</h4>
+      </mdb-card-title>
 
-    <!--Text-->
-    <mdb-card-text> {{ project.description }}
-    </mdb-card-text>
+      <!--Text-->
+      <mdb-card-text>
+          {{ project.description }}
+      </mdb-card-text>
 
-    <div class="text-left">
-      <a *ngIf="editable" mdbBtn color="primary" mdbWavesEffect (click)="onEdit()">Edit</a>
-      <a mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onDelete()">Delete</a>
-    </div>
+      <!--OCR Text-->
+      <mdb-card-text>
+          {{ project.ocrText }}
+      </mdb-card-text>
+
+      <div class="text-left">
+          <a mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onDelete()">Delete</a>
+      </div>
   </mdb-card-body>
 </mdb-card>

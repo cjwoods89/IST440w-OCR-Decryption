@@ -8,7 +8,7 @@
     <div class="modal-body">
         <form #projectForm="ngForm">
             <div class="text-center">
-                <img [src]="imgSrc" height="250px" width="250px"/>
+                <img [src]="imgSrc" height="250px" width="250px" />
             </div>
             <div class="md-form">
                 <input type="text" class="form-control" name="title" [(ngModel)]="project.title" mdbInput mdbValidate [validateSuccess]="false" #title="ngModel" required>

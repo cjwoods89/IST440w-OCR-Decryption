@@ -34,7 +34,8 @@ export class ProjectsEffects {
               key: key || null,
               title: project.title || null,
               description: project.description || null,
-              photoUrl: project.photoUrl || null
+                photoUrl: project.photoUrl || null,
+                ocrText: project.ocrText || null
             };
           });
           return (new fromProjects.ProjectsLoaded({ projects: projectsData }));
@@ -58,15 +59,6 @@ export class ProjectsEffects {
     map((action: fromProjects.ProjectDeleted) => action.payload),
     withLatestFrom(this.store.pipe(select(getUser))),
     switchMap(([payload, user]: any) => this.projectsService.delete(payload.project, user.uid))
-  );
-
-  @Effect({ dispatch: false })
-  edit$ = this.actions$.pipe(
-    ofType(ProjectsActionTypes.PROJECT_EDITED),
-    map((action: fromProjects.ProjectEdited) => action.payload),
-    withLatestFrom(this.store.pipe(select(getUser))),
-    switchMap(([payload, user]: any) => this.projectsService.update(payload.project, user.uid)
-    )
   );
 
 }
