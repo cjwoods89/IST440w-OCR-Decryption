@@ -22,7 +22,8 @@ export class ProjectModalComponent implements OnInit {
     imgSrc: string = this.imgString;
     base64ImgSrc: string;
     selectedImage: any = null;
-    ocrText: string;
+    ocrText: string = 'ERROR - Unable to OCR the image file. Please try again with a different image.';
+    decryptedText: string = 'ERROR - Unable to decrypt the image file\'s OCRd text. Please try again with a different image.';
 
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
@@ -141,8 +142,10 @@ export class ProjectModalComponent implements OnInit {
         const cipher = new Cipher();
 
         var decrypted = cipher.encrypt(text, rotation);
+
         console.log(decrypted);
 
+    /*return (this.checkString(decrypted));*/
         return (decrypted.toString() === "PARA MI FAMILIA");
     }
 
@@ -153,6 +156,7 @@ export class ProjectModalComponent implements OnInit {
         var decrypted = crypto.AES.decrypt(text, passphrase);
         console.log(decrypted);
 
+    /*return (this.checkString(decrypted));*/
         return (decrypted.toString() === "PARA MI FAMILIA");
     }
 
@@ -162,7 +166,17 @@ export class ProjectModalComponent implements OnInit {
 
         var decrypted = crypto.TripleDES.decrypt(text, passphrase);
         console.log(decrypted);
-        
+
+    /*return (this.checkString(decrypted));*/
         return (decrypted.toString() === "PARA MI FAMILIA");
-    }   
+    }
+
+    checkString(text: any) {
+        if (typeof text === 'string' || text instanceof String) {
+            this.project.decryptedText = text.toString();
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
