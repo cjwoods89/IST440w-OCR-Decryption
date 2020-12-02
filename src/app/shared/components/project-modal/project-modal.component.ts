@@ -145,8 +145,8 @@ export class ProjectModalComponent implements OnInit {
 
         console.log(decrypted);
 
-    /*return (this.checkString(decrypted));*/
-        return (decrypted.toString() === "PARA MI FAMILIA");
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
     }
 
     aesPassphrase(text: string) {
@@ -156,8 +156,8 @@ export class ProjectModalComponent implements OnInit {
         var decrypted = crypto.AES.decrypt(text, passphrase);
         console.log(decrypted);
 
-    /*return (this.checkString(decrypted));*/
-        return (decrypted.toString() === "PARA MI FAMILIA");
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
     }
 
     tripleDES(text: string) {
@@ -167,8 +167,8 @@ export class ProjectModalComponent implements OnInit {
         var decrypted = crypto.TripleDES.decrypt(text, passphrase);
         console.log(decrypted);
 
-    /*return (this.checkString(decrypted));*/
-        return (decrypted.toString() === "PARA MI FAMILIA");
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
     }
 
     checkString(text: any) {
