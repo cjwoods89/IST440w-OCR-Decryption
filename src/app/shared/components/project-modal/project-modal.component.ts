@@ -141,7 +141,7 @@ export class ProjectModalComponent implements OnInit {
         var rotation = 2;
         const cipher = new Cipher();
 
-        var decrypted = cipher.encrypt(text, rotation);
+        var decrypted = cipher.decrypt(text, rotation);
 
         console.log(decrypted);
 
