@@ -21,6 +21,11 @@
           {{ project.ocrText }}
       </mdb-card-text>
 
+      <!--Raw OCR Text-->
+      <mdb-card-text>
+          {{ project.decryptedText }}
+      </mdb-card-text>
+
       <div class="text-left">
           <a mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onDelete()">Delete</a>
       </div>

@@ -8,6 +8,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Cipher } from "js-cipher";
+import * as crypto from 'crypto-js';
 
 @Component({
     selector: 'app-project-modal',
@@ -20,7 +22,8 @@ export class ProjectModalComponent implements OnInit {
     imgSrc: string = this.imgString;
     base64ImgSrc: string;
     selectedImage: any = null;
-    ocrText: string;
+    ocrText: string = 'ERROR - Unable to OCR the image file. Please try again with a different image.';
+    decryptedText: string = 'ERROR - Unable to decrypt the image file\'s OCRd text. Please try again with a different image.';
 
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
@@ -35,6 +38,7 @@ export class ProjectModalComponent implements OnInit {
 
     projectData: Subject<Project> = new Subject();
     project: Project = {};
+    
 
     constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private http: HttpClient) { }
 
@@ -62,8 +66,20 @@ export class ProjectModalComponent implements OnInit {
                             next: data => {
                                 ocrResult = this.removeLinebreaks(data.body.responses[0].textAnnotations[0].description);
                                 this.project.ocrText = ocrResult;
-                                this.projectData.next(this.project);
-                                this.modalRef.hide();
+
+                                if (this.caesarCipher(ocrResult)) {
+                                    this.projectData.next(this.project);
+                                    this.modalRef.hide(); 
+                                } else if (this.aesPassphrase(ocrResult)) {
+                                    this.projectData.next(this.project);
+                                    this.modalRef.hide();
+                                } else if(this.tripleDES(ocrResult)) {
+                                    this.projectData.next(this.project);
+                                    this.modalRef.hide();
+                                } else {
+                                    this.projectData.next(this.project);
+                                    this.modalRef.hide();
+                                }
                             },
                             error: error => {
                                 console.log(error);
@@ -120,4 +136,47 @@ export class ProjectModalComponent implements OnInit {
         return dirtyString.replace(/[\r\n]+/gm, " ");
     }
 
+    caesarCipher(text: string) {
+
+        var rotation = 2;
+        const cipher = new Cipher();
+
+        var decrypted = cipher.decrypt(text, rotation);
+
+        console.log(decrypted);
+
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+    }
+
+    aesPassphrase(text: string) {
+
+        var passphrase = "loco";
+
+        var decrypted = crypto.AES.decrypt(text, passphrase);
+        console.log(decrypted);
+
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+    }
+
+    tripleDES(text: string) {
+
+        var passphrase = "abuela";
+
+        var decrypted = crypto.TripleDES.decrypt(text, passphrase);
+        console.log(decrypted);
+
+        return (this.checkString(decrypted));
+        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+    }
+
+    checkString(text: any) {
+        if (typeof text === 'string' || text instanceof String) {
+            this.project.decryptedText = text.toString();
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
