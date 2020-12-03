@@ -4,4 +4,5 @@ export interface Project {
     description?: string;
     photoUrl?: string;
     ocrText?: string;
+    decryptedText?: string;
 }
