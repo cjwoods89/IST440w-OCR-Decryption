@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Cipher } from "js-cipher";
 import * as crypto from 'crypto-js';
+import { SpellCheckerService } from 'ngx-spellchecker';
 
 @Component({
     selector: 'app-project-modal',
@@ -29,6 +30,7 @@ export class ProjectModalComponent implements OnInit {
     apiKey = environment.google.apiKey;
 
     loading: boolean = false;
+    dictionaryResult: boolean = true;
 
     heading: string;
 
@@ -38,11 +40,18 @@ export class ProjectModalComponent implements OnInit {
 
     projectData: Subject<Project> = new Subject();
     project: Project = {};
-    
 
-    constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private http: HttpClient) { }
+    //Word Dictionary
+    englishFileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic";
+    englishDictionary: any;
+
+    constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private spellCheckerService: SpellCheckerService, private http: HttpClient) { }
 
     ngOnInit() {
+        this.http.get(this.englishFileURL, { responseType: 'text' }).subscribe((res: any) => {
+            this.englishDictionary = this.spellCheckerService.getDictionary(res);
+            console.log(this.englishDictionary);
+        })
     }
 
     get userId() {
@@ -68,15 +77,19 @@ export class ProjectModalComponent implements OnInit {
                                 this.project.ocrText = ocrResult;
 
                                 if (this.caesarCipher(ocrResult)) {
+                                    this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide(); 
                                 } else if (this.aesPassphrase(ocrResult)) {
+                                    this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
-                                } else if(this.tripleDES(ocrResult)) {
+                                } else if (this.tripleDES(ocrResult)) {
+                                    this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 } else {
+                                    this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 }
@@ -137,46 +150,82 @@ export class ProjectModalComponent implements OnInit {
     }
 
     caesarCipher(text: string) {
-
+        console.log("In the caesarCipher method");
         var rotation = 2;
         const cipher = new Cipher();
 
         var decrypted = cipher.decrypt(text, rotation);
+        this.spellCheck(decrypted.toString());
 
-        console.log(decrypted);
+        console.log("this.dictionaryResult: " + this.dictionaryResult);
 
-        return (this.checkString(decrypted));
-        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+        if (this.dictionaryResult) {
+            console.log("changing the value of decryptedText");
+            this.decryptedText = decrypted.toString();
+        }
+
+        return this.dictionaryResult;
     }
 
     aesPassphrase(text: string) {
+        console.log("In the aesPassphrase method");
 
         var passphrase = "loco";
 
         var decrypted = crypto.AES.decrypt(text, passphrase);
-        console.log(decrypted);
+        this.spellCheck(decrypted.toString());
 
-        return (this.checkString(decrypted));
-        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+        console.log("this.dictionaryResult: " + this.dictionaryResult);
+
+        if (this.dictionaryResult) {
+            console.log("changing the value of decryptedText");
+            this.decryptedText = decrypted.toString();
+        }
+
+        return this.dictionaryResult;
     }
 
     tripleDES(text: string) {
+        console.log("In the tripleDES method");
 
         var passphrase = "abuela";
 
         var decrypted = crypto.TripleDES.decrypt(text, passphrase);
-        console.log(decrypted);
+        this.spellCheck(decrypted.toString());
 
-        return (this.checkString(decrypted));
-        /*return (decrypted.toString() === "PARA MI FAMILIA");*/
+        console.log("this.dictionaryResult: " + this.dictionaryResult);
+
+        if (this.dictionaryResult) {
+            console.log("changing the value of decryptedText");
+            this.decryptedText = decrypted.toString();
+        }
+
+        return this.dictionaryResult;
     }
 
-    checkString(text: any) {
-        if (typeof text === 'string' || text instanceof String) {
-            this.project.decryptedText = text.toString();
-            return true;
-        } else {
-            return false;
+    spellCheck(checkText: string) {
+        console.log("in spellCheck");
+        var formattedCheckText = this.removePunctuation(checkText);
+
+        var checkTextArray = formattedCheckText.split(" ");
+
+        for (let i = 0; i < checkTextArray.length; i++) {
+            if (checkTextArray[i] != "") {
+                if (!this.englishDictionary.spellCheck(checkTextArray[i])) {
+                    console.log("not an english word");
+                    this.dictionaryResult = false;
+                }
+            }
         }
+
+        if (this.dictionaryResult) {
+            this.decryptedText = checkText;
+        }
+    }
+
+    removePunctuation(text: string) {
+        var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+
+        return text.replace(regex, '');
     }
 }
