@@ -44,14 +44,33 @@ export class ProjectModalComponent implements OnInit {
     //Word Dictionary
     englishFileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic";
     englishDictionary: any;
+    spanishFileUrl = "../../../../assets/es-ES.dic";
+    spanishDictionary: any;
+    frenchFileUrl = "../../../../assets/fr.dic";
+    frenchDictionary: any;
+    italianFileUrl = "../../../../assets/it.dic";
+    italianDictionary: any;
+    dutchFileUrl = "../../../../assets/nl.dic";
+    dutchDictionary: any;
 
     constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private spellCheckerService: SpellCheckerService, private http: HttpClient) { }
 
     ngOnInit() {
         this.http.get(this.englishFileURL, { responseType: 'text' }).subscribe((res: any) => {
             this.englishDictionary = this.spellCheckerService.getDictionary(res);
-            console.log(this.englishDictionary);
-        })
+        });
+        this.http.get(this.spanishFileUrl, { responseType: 'text' }).subscribe((res: any) => {
+            this.spanishDictionary = this.spellCheckerService.getDictionary(res);
+        });
+        this.http.get(this.frenchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
+            this.frenchDictionary = this.spellCheckerService.getDictionary(res);
+        });
+        this.http.get(this.italianFileUrl, { responseType: 'text' }).subscribe((res: any) => {
+            this.italianDictionary = this.spellCheckerService.getDictionary(res);
+        });
+        this.http.get(this.dutchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
+            this.dutchDictionary = this.spellCheckerService.getDictionary(res);
+        });
     }
 
     get userId() {
@@ -80,7 +99,7 @@ export class ProjectModalComponent implements OnInit {
                                     this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide(); 
-                                } else if (this.aesPassphrase(ocrResult)) {
+                                }/* else if (this.aesPassphrase(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
@@ -88,7 +107,7 @@ export class ProjectModalComponent implements OnInit {
                                     this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
-                                } else {
+                                } */else {
                                     this.project.decryptedText = this.decryptedText;
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
@@ -155,9 +174,35 @@ export class ProjectModalComponent implements OnInit {
         const cipher = new Cipher();
 
         var decrypted = cipher.decrypt(text, rotation);
-        this.spellCheck(decrypted.toString());
 
-        console.log("this.dictionaryResult: " + this.dictionaryResult);
+        console.log(decrypted.toString());
+
+        var i = 0;
+
+        do {
+            console.log("#######trying english#######");
+            this.spellCheck(decrypted.toString(), this.englishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying spanish#######");
+            this.spellCheck(decrypted.toString(), this.spanishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying italian#######");
+            this.spellCheck(decrypted.toString(), this.italianDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying dutch#######");
+            this.spellCheck(decrypted.toString(), this.dutchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying french#######");
+            this.spellCheck(decrypted.toString(), this.frenchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            i++;
+        }
+        while (i < 1)
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
@@ -170,12 +215,38 @@ export class ProjectModalComponent implements OnInit {
     aesPassphrase(text: string) {
         console.log("In the aesPassphrase method");
 
-        var passphrase = "loco";
+        var passphrase = "IST440WSecretPassphrase";
 
         var decrypted = crypto.AES.decrypt(text, passphrase);
-        this.spellCheck(decrypted.toString());
 
-        console.log("this.dictionaryResult: " + this.dictionaryResult);
+        console.log(decrypted.toString());
+
+        var i = 0;
+
+        do {
+            console.log("#######trying english#######");
+            this.spellCheck(decrypted.toString(), this.englishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying spanish#######");
+            this.spellCheck(decrypted.toString(), this.spanishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying italian#######");
+            this.spellCheck(decrypted.toString(), this.italianDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying dutch#######");
+            this.spellCheck(decrypted.toString(), this.dutchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying french#######");
+            this.spellCheck(decrypted.toString(), this.frenchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            i++;
+        }
+        while (i < 1)
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
@@ -188,12 +259,38 @@ export class ProjectModalComponent implements OnInit {
     tripleDES(text: string) {
         console.log("In the tripleDES method");
 
-        var passphrase = "abuela";
+        var passphrase = "IST440WSecretPassphrase";
 
         var decrypted = crypto.TripleDES.decrypt(text, passphrase);
-        this.spellCheck(decrypted.toString());
 
-        console.log("this.dictionaryResult: " + this.dictionaryResult);
+        console.log(decrypted.toString());
+
+        var i = 0;
+
+        do {
+            console.log("#######trying english#######");
+            this.spellCheck(decrypted.toString(), this.englishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying spanish#######");
+            this.spellCheck(decrypted.toString(), this.spanishDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying italian#######");
+            this.spellCheck(decrypted.toString(), this.italianDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying dutch#######");
+            this.spellCheck(decrypted.toString(), this.dutchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            console.log("#######trying french#######");
+            this.spellCheck(decrypted.toString(), this.frenchDictionary);
+            if (this.dictionaryResult) { break; }
+
+            i++;
+        }
+        while (i < 1)
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
@@ -203,7 +300,7 @@ export class ProjectModalComponent implements OnInit {
         return this.dictionaryResult;
     }
 
-    spellCheck(checkText: string) {
+    spellCheck(checkText: string, dictionary: any) {
         console.log("in spellCheck");
         var formattedCheckText = this.removePunctuation(checkText);
 
@@ -211,9 +308,11 @@ export class ProjectModalComponent implements OnInit {
 
         for (let i = 0; i < checkTextArray.length; i++) {
             if (checkTextArray[i] != "") {
-                if (!this.englishDictionary.spellCheck(checkTextArray[i])) {
-                    console.log("not an english word");
+                if (!dictionary.spellCheck(checkTextArray[i])) {
+                    console.log(checkTextArray[i] + " is not an known word");
                     this.dictionaryResult = false;
+                } else {
+                    console.log(checkTextArray[i] + " is a word")
                 }
             }
         }
