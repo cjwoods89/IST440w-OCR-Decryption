@@ -29,6 +29,11 @@ export class ProjectModalComponent implements OnInit {
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
 
+    aesKey = environment.decryption.aesKey;
+    aesIV = environment.decryption.aesIV;
+    tripleDESKey = environment.decryption.tripleDESKey;
+    tripleDESIV = environment.decryption.tripleDESIV;
+
     loading: boolean = false;
     dictionaryResult: boolean = true;
 
@@ -97,18 +102,22 @@ export class ProjectModalComponent implements OnInit {
 
                                 if (this.caesarCipher(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'Caesar Cipher';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide(); 
                                 } else if (this.aesPassphrase(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'AES Passphrase';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 } else if (this.tripleDES(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'Triple DES';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 } else {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'None';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 }
@@ -190,8 +199,8 @@ export class ProjectModalComponent implements OnInit {
     aesPassphrase(text: any) {
         console.log("In the aesPassphrase method");
         console.log(text);
-        var key = crypto.enc.Hex.parse('36ebe205bcdfc499a25e6923f4450fa8');
-        var iv = crypto.enc.Hex.parse('be410fea41df7162a679875ec131cf2c');
+        var key = crypto.enc.Hex.parse(this.aesKey);
+        var iv = crypto.enc.Hex.parse(this.aesIV);
 
         var manual_data = text.replace(/\s+/g, '');
         console.log(manual_data);
@@ -219,8 +228,8 @@ export class ProjectModalComponent implements OnInit {
     tripleDES(text: string) {
         console.log("In the tripleDES method");
 
-        var key = "t8g5av9Z0IsZ77tyox9H19Rb";
-        var iv = "OjgLqBur";
+        var key = this.tripleDESKey;
+        var iv = this.tripleDESIV;
 
         var manual_data = text.replace(/\s+/g, '');
 
