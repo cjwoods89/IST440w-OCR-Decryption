@@ -21,32 +21,37 @@ import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { ModalModule } from 'angular-bootstrap-md';
 
+import { SpellCheckerModule, SpellCheckerService } from 'ngx-spellchecker';
+
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    AuthModule,
-    SharedModule,
-    ModalModule.forRoot(),
-    AdminModule,
-    AppRoutingModule,
-    HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-      AngularFireDatabaseModule,
-    AngularFireStorageModule,
-    CoreModule,
-    StoreModule.forRoot(reducers, {
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      },
-      metaReducers
-    }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([])
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        AuthModule,
+        SharedModule,
+        ModalModule.forRoot(),
+        AdminModule,
+        AppRoutingModule,
+        HttpClientModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
+        AngularFireDatabaseModule,
+        AngularFireStorageModule,
+        CoreModule,
+        SpellCheckerModule,
+        StoreModule.forRoot(reducers, {
+            runtimeChecks: {
+                strictStateImmutability: true,
+                strictActionImmutability: true
+            },
+            metaReducers,
+
+        }),
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
+        EffectsModule.forRoot([])
+    ],
+    providers: [SpellCheckerService],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

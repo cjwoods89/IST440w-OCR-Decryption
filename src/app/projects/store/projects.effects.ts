@@ -35,7 +35,8 @@ export class ProjectsEffects {
               title: project.title || null,
               description: project.description || null,
                 photoUrl: project.photoUrl || null,
-                ocrText: project.ocrText || null
+                ocrText: project.ocrText || null,
+                decryptedText: project.decryptedText || null
             };
           });
           return (new fromProjects.ProjectsLoaded({ projects: projectsData }));
