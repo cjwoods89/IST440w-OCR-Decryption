@@ -177,32 +177,7 @@ export class ProjectModalComponent implements OnInit {
 
         console.log(decrypted.toString());
 
-        var i = 0;
-
-        do {
-            console.log("#######trying english#######");
-            this.spellCheck(decrypted.toString(), this.englishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying spanish#######");
-            this.spellCheck(decrypted.toString(), this.spanishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying italian#######");
-            this.spellCheck(decrypted.toString(), this.italianDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying dutch#######");
-            this.spellCheck(decrypted.toString(), this.dutchDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying french#######");
-            this.spellCheck(decrypted.toString(), this.frenchDictionary);
-            if (this.dictionaryResult) { break; }
-
-            i++;
-        }
-        while (i < 1)
+        this.doSpellCheck(decrypted.toString());
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
@@ -221,32 +196,7 @@ export class ProjectModalComponent implements OnInit {
 
         console.log(decrypted.toString());
 
-        var i = 0;
-
-        do {
-            console.log("#######trying english#######");
-            this.spellCheck(decrypted.toString(), this.englishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying spanish#######");
-            this.spellCheck(decrypted.toString(), this.spanishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying italian#######");
-            this.spellCheck(decrypted.toString(), this.italianDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying dutch#######");
-            this.spellCheck(decrypted.toString(), this.dutchDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying french#######");
-            this.spellCheck(decrypted.toString(), this.frenchDictionary);
-            if (this.dictionaryResult) { break; }
-
-            i++;
-        }
-        while (i < 1)
+        this.doSpellCheck(decrypted.toString());
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
@@ -265,6 +215,17 @@ export class ProjectModalComponent implements OnInit {
 
         console.log(decrypted.toString());
 
+        this.doSpellCheck(decrypted.toString());
+
+        if (this.dictionaryResult) {
+            console.log("changing the value of decryptedText");
+            this.decryptedText = decrypted.toString();
+        }
+
+        return this.dictionaryResult;
+    }
+
+    doSpellCheck(decrypted: any) {
         var i = 0;
 
         do {
@@ -291,13 +252,6 @@ export class ProjectModalComponent implements OnInit {
             i++;
         }
         while (i < 1)
-
-        if (this.dictionaryResult) {
-            console.log("changing the value of decryptedText");
-            this.decryptedText = decrypted.toString();
-        }
-
-        return this.dictionaryResult;
     }
 
     spellCheck(checkText: string, dictionary: any) {
