@@ -42,15 +42,15 @@ export class ProjectModalComponent implements OnInit {
     project: Project = {};
 
     //Word Dictionary
-    englishFileURL = "https://raw.githubusercontent.com/JacobSamro/ngx-spellchecker/master/dict/normalized_en-US.dic";
+    englishFileURL = "../../../../assets/en-US.dic";
     englishDictionary: any;
     spanishFileUrl = "../../../../assets/es-ES.dic";
     spanishDictionary: any;
-    frenchFileUrl = "../../../../assets/fr.dic";
+    frenchFileUrl = "../../../../assets/fr-FR.dic";
     frenchDictionary: any;
-    italianFileUrl = "../../../../assets/it.dic";
+    italianFileUrl = "../../../../assets/it-IT.dic";
     italianDictionary: any;
-    dutchFileUrl = "../../../../assets/nl.dic";
+    dutchFileUrl = "../../../../assets/nl-NL.dic";
     dutchDictionary: any;
 
     constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private spellCheckerService: SpellCheckerService, private http: HttpClient) { }
@@ -61,6 +61,7 @@ export class ProjectModalComponent implements OnInit {
         });
         this.http.get(this.spanishFileUrl, { responseType: 'text' }).subscribe((res: any) => {
             this.spanishDictionary = this.spellCheckerService.getDictionary(res);
+            console.log(this.spanishDictionary);
         });
         this.http.get(this.frenchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
             this.frenchDictionary = this.spellCheckerService.getDictionary(res);
@@ -266,6 +267,7 @@ export class ProjectModalComponent implements OnInit {
                     console.log(checkTextArray[i] + " is not an known word");
                     this.dictionaryResult = false;
                 } else {
+                    this.dictionaryResult = true;
                     console.log(checkTextArray[i] + " is a word")
                 }
             }
@@ -277,7 +279,7 @@ export class ProjectModalComponent implements OnInit {
     }
 
     removePunctuation(text: string) {
-        var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+        var regex = /[!"#$%&()*+,./:;<=>?@[\]^_`{|}~]/g;
 
         return text.replace(regex, '');
     }
