@@ -12,6 +12,7 @@ import { ProjectModalComponent } from './components/project-modal/project-modal.
 import { FormsModule } from '@angular/forms';
 import { ProjectComponent } from './components/project/project.component';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
+import { EncryptionModalComponent } from './components/encryption-modal/encryption-modal.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ProjectsListComponent } from './components/projects-list/projects-list.
     ProjectModalComponent,
     ProjectsListComponent,
     ProjectComponent,
+    EncryptionModalComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { ProjectsListComponent } from './components/projects-list/projects-list.
   providers: [],
   entryComponents: [
     ConfirmModalComponent,
-    ProjectModalComponent
+      ProjectModalComponent,
+      EncryptionModalComponent
   ]
 })
 export class SharedModule {}
