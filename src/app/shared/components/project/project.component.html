@@ -8,22 +8,27 @@
 
       <!--Title-->
       <mdb-card-title>
-          <h4>{{ project.title }}</h4>
+          <h4>Title: {{ project.title }}</h4>
       </mdb-card-title>
 
       <!--Text-->
       <mdb-card-text>
-          {{ project.description }}
+          <b>Description:</b> {{ project.description }}
       </mdb-card-text>
 
       <!--OCR Text-->
       <mdb-card-text>
-          {{ project.ocrText }}
+          <b>OCR'd Text:</b> {{ project.ocrText }}
       </mdb-card-text>
 
-      <!--Raw OCR Text-->
+      <!--Decrypted Text-->
       <mdb-card-text>
-          {{ project.decryptedText }}
+          <b>Decrypted Text:</b> {{ project.decryptedText }}
+      </mdb-card-text>
+
+      <!--Decryption Method-->
+      <mdb-card-text>
+          <b>Decryption Method:</b> {{ project.decryptionMethod }}
       </mdb-card-text>
 
       <div class="text-left">
