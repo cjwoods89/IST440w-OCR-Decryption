@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.github\\workflows",
-    "\\src"
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\projects",
+    "\\src\\app\\projects\\services",
+    "\\src\\app\\shared",
+    "\\src\\app\\shared\\components",
+    "\\src\\app\\shared\\components\\encryption-modal",
+    "\\src\\app\\shared\\components\\project-modal",
+    "\\src\\assets"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\src\\app\\shared\\components\\encryption-modal\\encryption-modal.component.scss",
   "PreviewInSolutionExplorer": false
 }

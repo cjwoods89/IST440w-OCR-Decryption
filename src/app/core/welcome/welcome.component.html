@@ -1,12 +1,26 @@
 <div class="container full-page-container">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="col-md-8 text-center fadeIn animated">
-      <h1 class="app-heading mb-4">MDB Angular Boilerplate</h1>
-      <a mdbBtn color="primary" size="lg" class="mb-2" routerLink="/register">Create account</a>
-      <p>
-        <small>Already have an account?
-          <a routerLink="/login">Log in</a></small>
-      </p>
+    <div class="row h-100 justify-content-center align-items-center">
+        <mdb-card style="background-image: url('https://mdbootstrap.com/img/Photos/Others/gradient1.jpg')">
+            <div class="text-white text-center py-5 px-4 my-5">
+                <div>
+                    <h2 class="card-title h1-responsive pt-3 mb-5 font-bold"><strong>IST 440W - Team 3 - 2020 Fall Semester</strong></h2>
+                    <p class="mx-5 mb-5">
+                        The purpose of this project is to design and implement a solution for the decryption of handwritten messages.
+                        The messages in question may consist of a wide range of languages, or possibly a language that is made-up.
+                        The minimum requirements our stakeholders have agreed to is three languages. Our stakeholders have agreed that
+                        a minimum of three encryption / decryption types need to be supported.  With the complexity of this project,
+                        a multitude of functionalities will need to be integrated in order to have a seamless service that can be
+                        leveraged to solve the needs of our stakeholders.
+                    </p>
+                    <a mdbBtn color="white" outline="true" class="waves-light" mdbWavesEffect routerLink="/register">
+                        <mdb-icon fas icon="clone" class="left"></mdb-icon>Create account
+                    </a>
+                    <a mdbBtn color="white" outline="true" class="waves-light" mdbWavesEffect routerLink="/login">
+                        <mdb-icon fas icon="clone" class="left"></mdb-icon>Login
+                    </a>
+                </div>
+            </div>
+        </mdb-card>
     </div>
-  </div>
 </div>
+

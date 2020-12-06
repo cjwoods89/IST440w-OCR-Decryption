@@ -1,0 +1,20 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <i class="far fa-window-close"></i>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Let's Encrypt Something!</h4>
+    </div>
+    <div class="modal-body">
+        <label for="message">Type your encrypted message here:</label>
+        <textarea type="text" id="message" class="md-textarea form-control" name="message" [(ngModel)]="message" required></textarea>
+        <hr />
+        <label for="message">Encrypted message is displayed here:</label>
+        <textarea type="text" id="encryptedMessage" class="md-textarea form-control" name="encryptedMessage" [(ngModel)]="encryptedMessage" readonly></textarea>
+    </div>
+    <div class="modal-footer">
+        <button type="button" mdbBtn color="blue" class="waves-light" mdbWavesEffect (click)="onCipher()">Caesar Cipher</button>
+        <button type="button" mdbBtn color="blue" class="waves-light" mdbWavesEffect (click)="onAES()">AES Encryption</button>
+        <button type="button" mdbBtn color="blue" class="waves-light" mdbWavesEffect (click)="onTripleDES()">Triple DES Encryption</button>
+    </div>
+</div>
