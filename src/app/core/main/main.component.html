@@ -13,7 +13,7 @@
 
                     <!-- Card image -->
                     <div class="view view-cascade overlay">
-                        <img class="card-img-top" src="../../../assets/MultiprocessingMoguls.png" alt="Sample image">
+                        <img class="card-img-top" src="../../../assets/multiProcessingMoguls2.png" alt="Sample image">
                         <div class="mask rgba-white-slight"></div>
                     </div>
 
@@ -38,18 +38,22 @@
                         After plenty of research and concept creation, our team has settled on leveraging the Google Vision API. 
                         The services it provides, while maintaining the stakeholder requirements is unmatched for the low maintenance cost.
                     </p>
+                    <p>
                         Once we can detect the text from an image using OCR, we'll need to take the text and run it through our 
                         decryption methods with brute-forced patterns. Our team has decided to tackle the three most common 
                         encryption techniques: Caesar Cipher, AES and Triple DES. Caesar Cipher leverages a standard shift key of three, 
                         while AES and Triple DES do need a passphrase to decrypt. Our service does provide a convenient Encryption 
                         form for testing these services.
+                    </p>
                     <p>
                         As our service begins to decrypt the message, each potential outcome is stored in a database for the
                         analysis phase, sorted by the user id. At this point, we are unaware of which outcome is the correct one, nor do we know the
                         language it originated from. Each possible outcome will be sent to a multi-language dictionary service for verification. 
                         The results from the service should be able to validate if the specific combination of letters and words corresponds
                         with a word in its designated language. Once we receive a positive response for every word in the original 
-                        message, we will be able to tag it as the answer. Supported languages are the following: English, Spanish, and French.
+                        message, we will be able to tag it as the answer. 
+                        
+                        Supported languages are the following: English, Spanish, and French.
                     </p>
                 </div>
 

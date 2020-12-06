@@ -169,7 +169,7 @@ export class ProjectModalComponent implements OnInit {
 
     caesarCipher(text: any) {
         console.log("In the caesarCipher method");
-        var rotation = 2;
+        var rotation = 3;
         const cipher = new Cipher();
 
         var decrypted = cipher.decrypt(text, rotation);
