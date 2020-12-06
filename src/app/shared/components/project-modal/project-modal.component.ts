@@ -53,10 +53,6 @@ export class ProjectModalComponent implements OnInit {
     spanishDictionary: any;
     frenchFileUrl = "../../../../assets/fr-FR.dic";
     frenchDictionary: any;
-    italianFileUrl = "../../../../assets/it-IT.dic";
-    italianDictionary: any;
-    dutchFileUrl = "../../../../assets/nl-NL.dic";
-    dutchDictionary: any;
 
     constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private spellCheckerService: SpellCheckerService, private http: HttpClient) { }
 
@@ -69,12 +65,6 @@ export class ProjectModalComponent implements OnInit {
         });
         this.http.get(this.frenchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
             this.frenchDictionary = this.spellCheckerService.getDictionary(res);
-        });
-        this.http.get(this.italianFileUrl, { responseType: 'text' }).subscribe((res: any) => {
-            this.italianDictionary = this.spellCheckerService.getDictionary(res);
-        });
-        this.http.get(this.dutchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
-            this.dutchDictionary = this.spellCheckerService.getDictionary(res);
         });
     }
 
@@ -263,14 +253,6 @@ export class ProjectModalComponent implements OnInit {
 
             console.log("#######trying spanish#######");
             this.spellCheck(decrypted.toString(), this.spanishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying italian#######");
-            this.spellCheck(decrypted.toString(), this.italianDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying dutch#######");
-            this.spellCheck(decrypted.toString(), this.dutchDictionary);
             if (this.dictionaryResult) { break; }
 
             console.log("#######trying french#######");
