@@ -29,6 +29,11 @@ export class ProjectModalComponent implements OnInit {
     baseURL = environment.google.baseUrl;
     apiKey = environment.google.apiKey;
 
+    aesKey = environment.decryption.aesKey;
+    aesIV = environment.decryption.aesIV;
+    tripleDESKey = environment.decryption.tripleDESKey;
+    tripleDESIV = environment.decryption.tripleDESIV;
+
     loading: boolean = false;
     dictionaryResult: boolean = true;
 
@@ -48,10 +53,6 @@ export class ProjectModalComponent implements OnInit {
     spanishDictionary: any;
     frenchFileUrl = "../../../../assets/fr-FR.dic";
     frenchDictionary: any;
-    italianFileUrl = "../../../../assets/it-IT.dic";
-    italianDictionary: any;
-    dutchFileUrl = "../../../../assets/nl-NL.dic";
-    dutchDictionary: any;
 
     constructor(public modalRef: MDBModalRef, private afAuth: AngularFireAuth, private storage: AngularFireStorage, private spellCheckerService: SpellCheckerService, private http: HttpClient) { }
 
@@ -61,16 +62,9 @@ export class ProjectModalComponent implements OnInit {
         });
         this.http.get(this.spanishFileUrl, { responseType: 'text' }).subscribe((res: any) => {
             this.spanishDictionary = this.spellCheckerService.getDictionary(res);
-            console.log(this.spanishDictionary);
         });
         this.http.get(this.frenchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
             this.frenchDictionary = this.spellCheckerService.getDictionary(res);
-        });
-        this.http.get(this.italianFileUrl, { responseType: 'text' }).subscribe((res: any) => {
-            this.italianDictionary = this.spellCheckerService.getDictionary(res);
-        });
-        this.http.get(this.dutchFileUrl, { responseType: 'text' }).subscribe((res: any) => {
-            this.dutchDictionary = this.spellCheckerService.getDictionary(res);
         });
     }
 
@@ -98,18 +92,22 @@ export class ProjectModalComponent implements OnInit {
 
                                 if (this.caesarCipher(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'Caesar Cipher';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide(); 
-                                }/* else if (this.aesPassphrase(ocrResult)) {
+                                } else if (this.aesPassphrase(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'AES Passphrase';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 } else if (this.tripleDES(ocrResult)) {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'Triple DES';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
-                                } */else {
+                                } else {
                                     this.project.decryptedText = this.decryptedText;
+                                    this.project.decryptionMethod = 'None';
                                     this.projectData.next(this.project);
                                     this.modalRef.hide();
                                 }
@@ -169,7 +167,7 @@ export class ProjectModalComponent implements OnInit {
         return dirtyString.replace(/[\r\n]+/gm, " ");
     }
 
-    caesarCipher(text: string) {
+    caesarCipher(text: any) {
         console.log("In the caesarCipher method");
         var rotation = 2;
         const cipher = new Cipher();
@@ -188,20 +186,30 @@ export class ProjectModalComponent implements OnInit {
         return this.dictionaryResult;
     }
 
-    aesPassphrase(text: string) {
+    aesPassphrase(text: any) {
         console.log("In the aesPassphrase method");
+        console.log(text);
+        var key = crypto.enc.Hex.parse(this.aesKey);
+        var iv = crypto.enc.Hex.parse(this.aesIV);
 
-        var passphrase = "IST440WSecretPassphrase";
-
-        var decrypted = crypto.AES.decrypt(text, passphrase);
-
-        console.log(decrypted.toString());
+        var manual_data = text.replace(/\s+/g, '');
+        console.log(manual_data);
+        var decrypted = crypto.AES.decrypt(
+            manual_data,
+            key,
+            {
+                iv: iv,
+                mode: crypto.mode.CBC,
+                padding: crypto.pad.Pkcs7
+            }
+        );
+        console.log(decrypted.toString(crypto.enc.Utf8));
 
         this.doSpellCheck(decrypted.toString());
 
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
-            this.decryptedText = decrypted.toString();
+            this.decryptedText = decrypted.toString(crypto.enc.Utf8);
         }
 
         return this.dictionaryResult;
@@ -210,17 +218,26 @@ export class ProjectModalComponent implements OnInit {
     tripleDES(text: string) {
         console.log("In the tripleDES method");
 
-        var passphrase = "IST440WSecretPassphrase";
+        var key = this.tripleDESKey;
+        var iv = this.tripleDESIV;
 
-        var decrypted = crypto.TripleDES.decrypt(text, passphrase);
+        var manual_data = text.replace(/\s+/g, '');
 
-        console.log(decrypted.toString());
+        var decrypted = crypto.TripleDES.decrypt(
+            manual_data,
+            crypto.enc.Utf8.parse(key),
+            {
+                iv: crypto.enc.Utf8.parse(iv)
+            }
+        );
 
-        this.doSpellCheck(decrypted.toString());
+        console.log(decrypted.toString(crypto.enc.Utf8));
 
+        this.doSpellCheck(decrypted.toString(crypto.enc.Utf8));
+        
         if (this.dictionaryResult) {
             console.log("changing the value of decryptedText");
-            this.decryptedText = decrypted.toString();
+            this.decryptedText = decrypted.toString(crypto.enc.Utf8);
         }
 
         return this.dictionaryResult;
@@ -236,14 +253,6 @@ export class ProjectModalComponent implements OnInit {
 
             console.log("#######trying spanish#######");
             this.spellCheck(decrypted.toString(), this.spanishDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying italian#######");
-            this.spellCheck(decrypted.toString(), this.italianDictionary);
-            if (this.dictionaryResult) { break; }
-
-            console.log("#######trying dutch#######");
-            this.spellCheck(decrypted.toString(), this.dutchDictionary);
             if (this.dictionaryResult) { break; }
 
             console.log("#######trying french#######");
@@ -282,5 +291,9 @@ export class ProjectModalComponent implements OnInit {
         var regex = /[!"#$%&()*+,./:;<=>?@[\]^_`{|}~]/g;
 
         return text.replace(regex, '');
+    }
+
+    removeWhiteSpace(text: string) {
+        return text.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/, '') 
     }
 }
